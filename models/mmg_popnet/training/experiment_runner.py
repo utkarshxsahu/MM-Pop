@@ -688,6 +688,7 @@ def run_all_experiments(rank=0, world_size=1):
     datasets_to_process = cfg.DATASETS_TO_RUN
     timestamp           = datetime.now().strftime("%Y%m%d_%H%M%S")
     run_id              = f"run_{timestamp}"
+    run_root            = os.path.join(cfg.OUTPUT_DIR, run_id)
     training_seeds      = resolve_seed_list(
         getattr(cfg, "TRAINING_SEEDS", None),
         cfg.TRAINING_SEED,
@@ -747,7 +748,7 @@ def run_all_experiments(rank=0, world_size=1):
                 f"'root_only_reference_window': <window_minutes> to fix this."
             )
 
-        output_base = os.path.join(cfg.OUTPUT_DIR, run_id)
+        output_base = os.path.join(run_root, dataset_name)
         if rank == 0:
             os.makedirs(output_base, exist_ok=True)
         _barrier()

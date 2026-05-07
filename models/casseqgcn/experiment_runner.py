@@ -184,7 +184,7 @@ def run_full(model_cfg, train_loader, val_loader, args):
 
 
 def create_output_dirs(dataset_name, run_name):
-    dataset_root = os.path.join(config.get_dataset_spec(dataset_name)["output_dir"], run_name)
+    dataset_root = os.path.join(config.get_dataset_spec(dataset_name)["output_dir"], run_name, dataset_name)
     os.makedirs(dataset_root, exist_ok=True)
     return dataset_root
 
@@ -470,18 +470,35 @@ def main():
 
     datasets = resolve_datasets(args.datasets)
     run_name = args.run_name or datetime.now().strftime("%Y%m%d_%H%M%S")
-    combined_root = args.output_root or os.path.join(os.getcwd(), "experiment_runs", run_name)
+    combined_root = args.output_root or os.path.join(config.RESULTS_ROOT, run_name)
     os.makedirs(combined_root, exist_ok=True)
     combined_log_path = os.path.join(combined_root, "combined_summary.log")
+    run_log_path = os.path.join(combined_root, "run.log")
+    append_log(run_log_path, [
+        f"{datetime.now().isoformat()}\tSTART datasets={datasets} windows={args.windows} future_horizons={args.future_horizons}"
+    ])
 
     all_results = []
     for dataset_name in datasets:
         for window_label in resolve_windows(dataset_name, args.windows, args.include_root_only):
-            all_results.append(
-                run_experiment(dataset_name, window_label, args, run_name, combined_log_path)
-            )
+            try:
+                all_results.append(
+                    run_experiment(dataset_name, window_label, args, run_name, combined_log_path)
+                )
+                append_log(run_log_path, [
+                    f"{datetime.now().isoformat()}\tDONE dataset={dataset_name} window={format_window_label(window_label)}"
+                ])
+            except Exception as exc:
+                import traceback
+
+                append_log(run_log_path, [
+                    f"{datetime.now().isoformat()}\tERROR dataset={dataset_name} window={format_window_label(window_label)} error={exc}",
+                    traceback.format_exc(),
+                ])
+                print(f"\nERROR dataset={dataset_name} window={format_window_label(window_label)}: {exc}")
 
     save_json(os.path.join(combined_root, "combined_results.json"), all_results)
+    append_log(run_log_path, [f"{datetime.now().isoformat()}\tCOMPLETE"])
 
 
 if __name__ == "__main__":

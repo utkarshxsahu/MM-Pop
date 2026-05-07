@@ -6,8 +6,11 @@ import os
 import torch
 
 
-BLUESKY_ROOT = "/scratch/dgl/Social_Network/bluesky/processed"
-REDDIT_ROOT = "/scratch/dgl/Social_Network/reddit/filtered/tree_full"
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+DATASETS_ROOT = os.path.join(PROJECT_ROOT, "datasets")
+RESULTS_ROOT = os.path.join(PROJECT_ROOT, "results", "deepcas")
+BLUESKY_ROOT = os.path.join(DATASETS_ROOT, "bluesky")
+REDDIT_ROOT = os.path.join(DATASETS_ROOT, "reddit")
 
 TARGET_NAMES = [
     "max_width",
@@ -32,84 +35,71 @@ DATASETS = {
         "paths": {
             "thread_metadata": os.path.join(
                 BLUESKY_ROOT,
-                "discussion_trees/samples/tree_65k/thread_metadata_updated_added.parquet",
+                "metadata/thread_metadata_updated_added.parquet",
             ),
             "thread_posts": os.path.join(
                 BLUESKY_ROOT,
-                "discussion_trees/samples/tree_65k/thread_posts_with_all_labels2.parquet",
+                "metadata/thread_posts_with_all_labels2.parquet",
             ),
-            "user_degrees": os.path.join(BLUESKY_ROOT, "followers/user_degrees.csv"),
-            "early_window_dir": os.path.join(
-                BLUESKY_ROOT, "discussion_trees/samples/tree_65k/gnn_snapshots"
-            ),
-            "split_dir": os.path.join(
-                BLUESKY_ROOT,
-                "discussion_trees/samples/tree_65k/gnn_snapshots/splits",
-            ),
-            "future_horizon_dir": os.path.join(
-                BLUESKY_ROOT,
-                "discussion_trees/samples/tree_65k/gnn_snapshots/future_horizons",
-            ),
-            "output_dir": os.path.join(
-                BLUESKY_ROOT,
-                "discussion_trees/samples/tree_65k/deepcas_results/bluesky",
-            ),
-            "embedding_dir": os.path.join(
-                BLUESKY_ROOT,
-                "discussion_trees/samples/tree_65k/deepcas_embeddings",
-            ),
+            "user_degrees": os.path.join(BLUESKY_ROOT, "metadata/user_degrees.csv"),
+            "early_window_dir": os.path.join(BLUESKY_ROOT, "snapshots"),
+            "split_dir": os.path.join(BLUESKY_ROOT, "snapshots/splits"),
+            "future_horizon_dir": os.path.join(BLUESKY_ROOT, "snapshots/future_horizons"),
+            "output_dir": RESULTS_ROOT,
+            "embedding_dir": os.path.join(BLUESKY_ROOT, "embeddings"),
         },
-        "windows": [0, 2, 10, 20],
+        "windows": [0, 2, 10],
         "root_only_reference_window": 2,
         "has_user_degrees": True,
         "root_score_column": "like_count",
     },
     "gaming": {
         "paths": {
-            "thread_metadata": os.path.join(REDDIT_ROOT, "reddit_gaming_metadata.parquet"),
-            "thread_posts": os.path.join(REDDIT_ROOT, "reddit_gaming_posts.parquet"),
+            "thread_metadata": os.path.join(REDDIT_ROOT, "gaming/metadata/reddit_gaming_metadata.parquet"),
+            "thread_posts": os.path.join(REDDIT_ROOT, "gaming/metadata/reddit_gaming_posts.parquet"),
             "user_degrees": None,
-            "early_window_dir": os.path.join(REDDIT_ROOT, "snapshots/gaming"),
-            "split_dir": os.path.join(REDDIT_ROOT, "snapshots/gaming/splits"),
-            "future_horizon_dir": os.path.join(REDDIT_ROOT, "snapshots/gaming/future_horizons"),
-            "output_dir": os.path.join(REDDIT_ROOT, "deepcas_results/gaming"),
-            "embedding_dir": os.path.join(REDDIT_ROOT, "deepcas_embeddings/gaming"),
+            "early_window_dir": os.path.join(REDDIT_ROOT, "gaming/snapshots"),
+            "split_dir": os.path.join(REDDIT_ROOT, "gaming/snapshots/splits"),
+            "future_horizon_dir": os.path.join(REDDIT_ROOT, "gaming/snapshots/future_horizons"),
+            "output_dir": RESULTS_ROOT,
+            "embedding_dir": os.path.join(REDDIT_ROOT, "gaming/embeddings"),
+            "image_dir": os.path.join(REDDIT_ROOT, "gaming/images"),
         },
-        "windows": [0, 20, 50, 90],
+        "windows": [0, 20, 50],
         "root_only_reference_window": 20,
         "has_user_degrees": False,
         "root_score_column": "score",
     },
     "futurology": {
         "paths": {
-            "thread_metadata": os.path.join(REDDIT_ROOT, "reddit_futurology_metadata.parquet"),
-            "thread_posts": os.path.join(REDDIT_ROOT, "reddit_futurology_posts.parquet"),
+            "thread_metadata": os.path.join(REDDIT_ROOT, "futurology/metadata/reddit_futurology_metadata.parquet"),
+            "thread_posts": os.path.join(REDDIT_ROOT, "futurology/metadata/reddit_futurology_posts.parquet"),
             "user_degrees": None,
-            "early_window_dir": os.path.join(REDDIT_ROOT, "snapshots/futurology"),
-            "split_dir": os.path.join(REDDIT_ROOT, "snapshots/futurology/splits"),
-            "future_horizon_dir": os.path.join(
-                REDDIT_ROOT, "snapshots/futurology/future_horizons"
-            ),
-            "output_dir": os.path.join(REDDIT_ROOT, "deepcas_results/futurology"),
-            "embedding_dir": os.path.join(REDDIT_ROOT, "deepcas_embeddings/futurology"),
+            "early_window_dir": os.path.join(REDDIT_ROOT, "futurology/snapshots"),
+            "split_dir": os.path.join(REDDIT_ROOT, "futurology/snapshots/splits"),
+            "future_horizon_dir": os.path.join(REDDIT_ROOT, "futurology/snapshots/future_horizons"),
+            "output_dir": RESULTS_ROOT,
+            "embedding_dir": os.path.join(REDDIT_ROOT, "futurology/embeddings"),
+            "image_dir": os.path.join(REDDIT_ROOT, "futurology/images"),
         },
-        "windows": [0, 30, 90, 180],
-        "root_only_reference_window": 30,
+        "windows": [0, 90],
+        "root_only_reference_window": 90,
         "has_user_degrees": False,
         "root_score_column": "score",
     },
     "ama": {
         "paths": {
-            "thread_metadata": os.path.join(REDDIT_ROOT, "reddit_ama_metadata.parquet"),
-            "thread_posts": os.path.join(REDDIT_ROOT, "reddit_ama_posts.parquet"),
+            "thread_metadata": os.path.join(REDDIT_ROOT, "ama/metadata/reddit_ama_metadata.parquet"),
+            "thread_posts": os.path.join(REDDIT_ROOT, "ama/metadata/reddit_ama_posts.parquet"),
             "user_degrees": None,
-            "early_window_dir": os.path.join(REDDIT_ROOT, "snapshots/ama"),
-            "split_dir": os.path.join(REDDIT_ROOT, "snapshots/ama/splits"),
-            "future_horizon_dir": os.path.join(REDDIT_ROOT, "snapshots/ama/future_horizons"),
-            "output_dir": os.path.join(REDDIT_ROOT, "deepcas_results/ama"),
-            "embedding_dir": os.path.join(REDDIT_ROOT, "deepcas_embeddings/ama"),
+            "early_window_dir": os.path.join(REDDIT_ROOT, "ama/snapshots"),
+            "split_dir": os.path.join(REDDIT_ROOT, "ama/snapshots/splits"),
+            "future_horizon_dir": os.path.join(REDDIT_ROOT, "ama/snapshots/future_horizons"),
+            "output_dir": RESULTS_ROOT,
+            "embedding_dir": os.path.join(REDDIT_ROOT, "ama/embeddings"),
+            "image_dir": os.path.join(REDDIT_ROOT, "ama/images"),
         },
-        "windows": [0, 15, 30, 60],
+        "windows": [0, 30],
         "root_only_reference_window": 15,
         "has_user_degrees": False,
         "root_score_column": "score",
@@ -117,7 +107,7 @@ DATASETS = {
 }
 
 # === RUN SELECTION ===
-DATASETS_TO_RUN = ["bluesky"]
+DATASETS_TO_RUN = ["bluesky", "gaming", "futurology", "ama"]
 USE_FUTURE_HORIZONS = True
 
 # === ACTIVE DATASET STATE ===

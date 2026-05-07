@@ -389,17 +389,20 @@ def train_dataset_all_windows(dataset_name: str, run_dir: Path) -> None:
 
 def main() -> None:
     run_dir = create_run_output_dir(config.RESULTS_BASE_DIR)
+    run_logger = setup_logging(run_dir, log_filename="run.log")
+    run_logger.info(f"Starting DeepHawkes datasets={config.DATASETS_TO_RUN}")
     for dataset_name in config.DATASETS_TO_RUN:
         if dataset_name not in config.DATASETS:
-            print(f"Error: dataset '{dataset_name}' not found in config.DATASETS")
+            run_logger.error(f"Dataset '{dataset_name}' not found in config.DATASETS")
             continue
         try:
             train_dataset_all_windows(dataset_name, run_dir)
         except Exception as exc:
-            print(f"Error training dataset {dataset_name}: {exc}")
+            run_logger.exception(f"Error training dataset {dataset_name}: {exc}")
             import traceback
 
             traceback.print_exc()
+    run_logger.info("DeepHawkes run complete")
 
 
 if __name__ == "__main__":

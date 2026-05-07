@@ -81,8 +81,8 @@ from training.experiment_runner import (save_test_predictions,
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
-FOUNDATIONAL_OUTPUT_BASE = "/scratch/dgl/Social_Network/foundational_results"
-FOUNDATIONAL_CACHE_BASE = "/scratch/dgl/Social_Network/foundational_cache"
+FOUNDATIONAL_OUTPUT_BASE = os.path.join(cfg.OUTPUT_DIR, "foundational")
+FOUNDATIONAL_CACHE_BASE = os.path.join(cfg.OUTPUT_DIR, "foundational_cache")
 
 # Per-GPU batch size for text_graphsage.
 TEXT_GRAPHSAGE_BATCH_SIZE      = 8
@@ -484,12 +484,7 @@ def run_foundational_experiments(rank=0, world_size=1):
 
     # Compute n_slots dynamically — all datasets must have the same number of windows
     slot_counts = [len(ds_cfg.DATASETS[d]['windows']) for d in datasets_to_process]
-    if len(set(slot_counts)) != 1:
-        raise ValueError(
-            f"All datasets must have the same number of windows for foundational training. "
-            f"Got: { {d: len(ds_cfg.DATASETS[d]['windows']) for d in datasets_to_process} }"
-        )
-    n_slots = slot_counts[0]
+    n_slots = max(slot_counts)
 
     # Must happen before any data loading or preprocessor fitting
     _add_foundational_features(n_slots)
@@ -498,7 +493,7 @@ def run_foundational_experiments(rank=0, world_size=1):
         logger.section("FOUNDATIONAL MODEL — ALL DATASETS × ALL SLOTS")
         logger.log(f"Datasets    : {datasets_to_process}")
         logger.log(f"Models      : {cfg.MODELS_TO_RUN}")
-        logger.log(f"Slots       : {n_slots}")
+        logger.log(f"Slots       : {n_slots} max")
         logger.log(f"Targets     : {feat_cfg.OUTPUT_TARGETS}")
         logger.log(f"DDP         : world_size={world_size}")
         logger.log(f"\nWindow map:")
@@ -562,8 +557,7 @@ def run_foundational_experiments(rank=0, world_size=1):
                     f"windows and no 'root_only_reference_window'. Set one of these."
                 )
 
-        for slot_idx in range(n_slots):
-            window_minutes = dataset_windows[slot_idx]
+        for slot_idx, window_minutes in enumerate(dataset_windows):
             is_root_only   = (window_minutes == 0)
             _setup_dataset_config(dataset_name)   # reset cfg paths per dataset
 

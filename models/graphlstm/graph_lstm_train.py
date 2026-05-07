@@ -368,7 +368,8 @@ def main():
     args = parse_args()
     apply_runtime_overrides(args)
     run_stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    top_level_root = os.path.join(os.getcwd(), "runs", f"{config.MODE}_{run_stamp}")
+    top_level_root = os.path.join(config.RESULTS_ROOT, f"run_{config.MODE}_{run_stamp}")
+    config.RUN_OUTPUT_ROOT = top_level_root
     os.makedirs(top_level_root, exist_ok=True)
     combined_logger = RunLogger(os.path.join(top_level_root, "combined_results.log"))
     combined_logger.log(f"Run started: {datetime.now().isoformat()}")
@@ -377,7 +378,14 @@ def main():
 
     combined_results = {}
     for dataset_name in config.get_requested_datasets():
-        combined_results[dataset_name] = run_dataset(dataset_name, combined_logger)
+        try:
+            combined_results[dataset_name] = run_dataset(dataset_name, combined_logger)
+            combined_logger.log(f"Completed dataset: {dataset_name}")
+        except Exception as exc:
+            import traceback
+
+            combined_logger.log(f"ERROR dataset={dataset_name}: {exc}")
+            combined_logger.log(traceback.format_exc())
 
     with open(os.path.join(top_level_root, "combined_results.json"), "w") as handle:
         json.dump(combined_results, handle, indent=2)

@@ -5,6 +5,10 @@ Configuration for Graph-LSTM experiments.
 import os
 import torch
 
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+DATASETS_ROOT = os.path.join(PROJECT_ROOT, "datasets")
+RESULTS_ROOT = os.path.join(PROJECT_ROOT, "results", "graphlstm")
+RUN_OUTPUT_ROOT = None
 
 TARGET_NAMES = [
     "max_width",
@@ -41,50 +45,50 @@ WINDOW_ROOT_ONLY = "root_only"
 
 DATASET_REGISTRY = {
     "bluesky": {
-        "base_dir": "/scratch/dgl/Social_Network/bluesky/processed",
-        "thread_metadata": "/scratch/dgl/Social_Network/bluesky/processed/discussion_trees/samples/tree_65k/thread_metadata_updated_added.parquet",
-        "thread_posts": "/scratch/dgl/Social_Network/bluesky/processed/discussion_trees/samples/tree_65k/thread_posts_with_all_labels2.parquet",
-        "user_degrees": "/scratch/dgl/Social_Network/bluesky/processed/followers/user_degrees.csv",
+        "base_dir": os.path.join(DATASETS_ROOT, "bluesky"),
+        "thread_metadata": os.path.join(DATASETS_ROOT, "bluesky", "metadata", "thread_metadata_updated_added.parquet"),
+        "thread_posts": os.path.join(DATASETS_ROOT, "bluesky", "metadata", "thread_posts_with_all_labels2.parquet"),
+        "user_degrees": os.path.join(DATASETS_ROOT, "bluesky", "metadata", "user_degrees.csv"),
         "has_user_degrees": True,
-        "early_window_dir": "/scratch/dgl/Social_Network/bluesky/processed/discussion_trees/samples/tree_65k/gnn_snapshots",
-        "output_dir": "/scratch/dgl/Social_Network/bluesky/processed/discussion_trees/samples/tree_65k/zayats_results",
-        "windows": [2, 10, 20],
+        "early_window_dir": os.path.join(DATASETS_ROOT, "bluesky", "snapshots"),
+        "output_dir": RESULTS_ROOT,
+        "windows": [2, 10],
         "root_only_split_window": 2,
         "root_score_column": "like_count",
     },
     "gaming": {
-        "base_dir": "/scratch/dgl/Social_Network/reddit/filtered/tree_full",
-        "thread_metadata": "/scratch/dgl/Social_Network/reddit/filtered/tree_full/reddit_gaming_metadata.parquet",
-        "thread_posts": "/scratch/dgl/Social_Network/reddit/filtered/tree_full/reddit_gaming_posts.parquet",
+        "base_dir": os.path.join(DATASETS_ROOT, "reddit", "gaming"),
+        "thread_metadata": os.path.join(DATASETS_ROOT, "reddit", "gaming", "metadata", "reddit_gaming_metadata.parquet"),
+        "thread_posts": os.path.join(DATASETS_ROOT, "reddit", "gaming", "metadata", "reddit_gaming_posts.parquet"),
         "user_degrees": None,
         "has_user_degrees": False,
-        "early_window_dir": "/scratch/dgl/Social_Network/reddit/filtered/tree_full/snapshots/gaming",
-        "output_dir": "/scratch/dgl/Social_Network/reddit/filtered/tree_full/zayats_results/gaming",
-        "windows": [20, 50, 90],
+        "early_window_dir": os.path.join(DATASETS_ROOT, "reddit", "gaming", "snapshots"),
+        "output_dir": RESULTS_ROOT,
+        "windows": [20, 50],
         "root_only_split_window": 20,
         "root_score_column": "score",
     },
     "futurology": {
-        "base_dir": "/scratch/dgl/Social_Network/reddit/filtered/tree_full",
-        "thread_metadata": "/scratch/dgl/Social_Network/reddit/filtered/tree_full/reddit_futurology_metadata.parquet",
-        "thread_posts": "/scratch/dgl/Social_Network/reddit/filtered/tree_full/reddit_futurology_posts.parquet",
+        "base_dir": os.path.join(DATASETS_ROOT, "reddit", "futurology"),
+        "thread_metadata": os.path.join(DATASETS_ROOT, "reddit", "futurology", "metadata", "reddit_futurology_metadata.parquet"),
+        "thread_posts": os.path.join(DATASETS_ROOT, "reddit", "futurology", "metadata", "reddit_futurology_posts.parquet"),
         "user_degrees": None,
         "has_user_degrees": False,
-        "early_window_dir": "/scratch/dgl/Social_Network/reddit/filtered/tree_full/snapshots/futurology",
-        "output_dir": "/scratch/dgl/Social_Network/reddit/filtered/tree_full/zayats_results/futurology",
-        "windows": [30, 90, 180],
-        "root_only_split_window": 30,
+        "early_window_dir": os.path.join(DATASETS_ROOT, "reddit", "futurology", "snapshots"),
+        "output_dir": RESULTS_ROOT,
+        "windows": [90],
+        "root_only_split_window": 90,
         "root_score_column": "score",
     },
     "ama": {
-        "base_dir": "/scratch/dgl/Social_Network/reddit/filtered/tree_full",
-        "thread_metadata": "/scratch/dgl/Social_Network/reddit/filtered/tree_full/reddit_ama_metadata.parquet",
-        "thread_posts": "/scratch/dgl/Social_Network/reddit/filtered/tree_full/reddit_ama_posts.parquet",
+        "base_dir": os.path.join(DATASETS_ROOT, "reddit", "ama"),
+        "thread_metadata": os.path.join(DATASETS_ROOT, "reddit", "ama", "metadata", "reddit_ama_metadata.parquet"),
+        "thread_posts": os.path.join(DATASETS_ROOT, "reddit", "ama", "metadata", "reddit_ama_posts.parquet"),
         "user_degrees": None,
         "has_user_degrees": False,
-        "early_window_dir": "/scratch/dgl/Social_Network/reddit/filtered/tree_full/snapshots/ama",
-        "output_dir": "/scratch/dgl/Social_Network/reddit/filtered/tree_full/zayats_results/ama",
-        "windows": [15, 30, 60],
+        "early_window_dir": os.path.join(DATASETS_ROOT, "reddit", "ama", "snapshots"),
+        "output_dir": RESULTS_ROOT,
+        "windows": [30],
         "root_only_split_window": 15,
         "root_score_column": "score",
     },
@@ -96,7 +100,7 @@ DATASET_REGISTRY = {
 #   DATASETS = ["gaming"]
 #   DATASETS = ["bluesky", "ama"]
 #   DATASETS = "all"
-DATASETS = ["ama"]
+DATASETS = "all"
 
 # Which time windows to run for every selected dataset.
 # Use None to take the dataset defaults from DATASET_REGISTRY.
@@ -202,4 +206,5 @@ def get_window_label(window_tag):
 def get_output_root(dataset_name=None, mode=None):
     dataset_cfg = get_dataset_config(dataset_name)
     mode = mode or MODE
-    return os.path.join(dataset_cfg["output_dir"], "graph_lstm_results", mode)
+    base_dir = RUN_OUTPUT_ROOT or dataset_cfg["output_dir"]
+    return os.path.join(base_dir, dataset_name or ACTIVE_DATASET, mode)

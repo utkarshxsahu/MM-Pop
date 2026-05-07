@@ -5,6 +5,10 @@ Configuration for CasSeqGCN experiments.
 import os
 import torch
 
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+DATASETS_ROOT = os.path.join(PROJECT_ROOT, "datasets")
+RESULTS_ROOT = os.path.join(PROJECT_ROOT, "results", "casseqgcn")
+
 TARGET_NAMES = [
     "max_width",
     "max_depth",
@@ -27,41 +31,48 @@ ROOT_ONLY_WINDOW = "root_only"
 ROOT_ONLY_REFERENCE_WINDOW = {
     "bluesky": 2,
     "gaming": 20,
-    "futurology": 30,
+    "futurology": 90,
     "ama": 15,
 }
 
 DATASET_SPECS = {
     "bluesky": {
-        "metadata_path": "/scratch/dgl/Social_Network/bluesky/processed/discussion_trees/samples/tree_65k/thread_metadata_updated_added.parquet",
-        "posts_path": "/scratch/dgl/Social_Network/bluesky/processed/discussion_trees/samples/tree_65k/thread_posts_with_all_labels2.parquet",
-        "early_window_dir": "/scratch/dgl/Social_Network/bluesky/processed/discussion_trees/samples/tree_65k/gnn_snapshots",
-        "output_dir": "/scratch/dgl/Social_Network/bluesky/processed/discussion_trees/samples/tree_65k/casseqgcn_results",
-        "windows": [2, 10, 20],
+        "metadata_path": os.path.join(DATASETS_ROOT, "bluesky", "metadata", "thread_metadata_updated_added.parquet"),
+        "posts_path": os.path.join(DATASETS_ROOT, "bluesky", "metadata", "thread_posts_with_all_labels2.parquet"),
+        "early_window_dir": os.path.join(DATASETS_ROOT, "bluesky", "snapshots"),
+        "embedding_dir": os.path.join(DATASETS_ROOT, "bluesky", "embeddings"),
+        "output_dir": RESULTS_ROOT,
+        "windows": [2, 10],
         "root_score_column": "like_count",
     },
     "gaming": {
-        "metadata_path": "/scratch/dgl/Social_Network/reddit/filtered/tree_full/reddit_gaming_metadata.parquet",
-        "posts_path": "/scratch/dgl/Social_Network/reddit/filtered/tree_full/reddit_gaming_posts.parquet",
-        "early_window_dir": "/scratch/dgl/Social_Network/reddit/filtered/tree_full/snapshots/gaming",
-        "output_dir": "/scratch/dgl/Social_Network/reddit/filtered/tree_full/casseqgcn_results/gaming",
-        "windows": [20, 50, 90],
+        "metadata_path": os.path.join(DATASETS_ROOT, "reddit", "gaming", "metadata", "reddit_gaming_metadata.parquet"),
+        "posts_path": os.path.join(DATASETS_ROOT, "reddit", "gaming", "metadata", "reddit_gaming_posts.parquet"),
+        "early_window_dir": os.path.join(DATASETS_ROOT, "reddit", "gaming", "snapshots"),
+        "embedding_dir": os.path.join(DATASETS_ROOT, "reddit", "gaming", "embeddings"),
+        "image_dir": os.path.join(DATASETS_ROOT, "reddit", "gaming", "images"),
+        "output_dir": RESULTS_ROOT,
+        "windows": [20, 50],
         "root_score_column": "score",
     },
     "futurology": {
-        "metadata_path": "/scratch/dgl/Social_Network/reddit/filtered/tree_full/reddit_futurology_metadata.parquet",
-        "posts_path": "/scratch/dgl/Social_Network/reddit/filtered/tree_full/reddit_futurology_posts.parquet",
-        "early_window_dir": "/scratch/dgl/Social_Network/reddit/filtered/tree_full/snapshots/futurology",
-        "output_dir": "/scratch/dgl/Social_Network/reddit/filtered/tree_full/casseqgcn_results/futurology",
-        "windows": [30, 90, 180],
+        "metadata_path": os.path.join(DATASETS_ROOT, "reddit", "futurology", "metadata", "reddit_futurology_metadata.parquet"),
+        "posts_path": os.path.join(DATASETS_ROOT, "reddit", "futurology", "metadata", "reddit_futurology_posts.parquet"),
+        "early_window_dir": os.path.join(DATASETS_ROOT, "reddit", "futurology", "snapshots"),
+        "embedding_dir": os.path.join(DATASETS_ROOT, "reddit", "futurology", "embeddings"),
+        "image_dir": os.path.join(DATASETS_ROOT, "reddit", "futurology", "images"),
+        "output_dir": RESULTS_ROOT,
+        "windows": [90],
         "root_score_column": "score",
     },
     "ama": {
-        "metadata_path": "/scratch/dgl/Social_Network/reddit/filtered/tree_full/reddit_ama_metadata.parquet",
-        "posts_path": "/scratch/dgl/Social_Network/reddit/filtered/tree_full/reddit_ama_posts.parquet",
-        "early_window_dir": "/scratch/dgl/Social_Network/reddit/filtered/tree_full/snapshots/ama",
-        "output_dir": "/scratch/dgl/Social_Network/reddit/filtered/tree_full/casseqgcn_results/ama",
-        "windows": [15, 30, 60],
+        "metadata_path": os.path.join(DATASETS_ROOT, "reddit", "ama", "metadata", "reddit_ama_metadata.parquet"),
+        "posts_path": os.path.join(DATASETS_ROOT, "reddit", "ama", "metadata", "reddit_ama_posts.parquet"),
+        "early_window_dir": os.path.join(DATASETS_ROOT, "reddit", "ama", "snapshots"),
+        "embedding_dir": os.path.join(DATASETS_ROOT, "reddit", "ama", "embeddings"),
+        "image_dir": os.path.join(DATASETS_ROOT, "reddit", "ama", "images"),
+        "output_dir": RESULTS_ROOT,
+        "windows": [30],
         "root_score_column": "score",
     },
 }

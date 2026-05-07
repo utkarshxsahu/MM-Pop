@@ -38,22 +38,24 @@ from datetime import timedelta
 # Mirrors dataset_config.py — update paths here if they change
 # ============================================================
 
-BLUESKY_ROOT  = "/scratch/dgl/Social_Network/bluesky/processed"
-REDDIT_ROOT   = "/scratch/dgl/Social_Network/reddit/filtered/tree_full"
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+DATASETS_ROOT = os.path.join(PROJECT_ROOT, "datasets")
+BLUESKY_ROOT  = os.path.join(DATASETS_ROOT, "bluesky")
+REDDIT_ROOT   = os.path.join(DATASETS_ROOT, "reddit")
 
 DATASETS = {
     'bluesky': {
         'type': 'bluesky',
         'posts_file': os.path.join(
             BLUESKY_ROOT,
-            "discussion_trees/samples/tree_65k/thread_posts_with_all_labels2.parquet"
+            "metadata/thread_posts_with_all_labels2.parquet"
         ),
         'early_window_dir': os.path.join(
             BLUESKY_ROOT,
-            "discussion_trees/samples/tree_65k/gnn_snapshots"
+            "snapshots"
         ),
         # Windows that have existing splits on disk
-        'split_windows': [2, 10, 30],
+        'split_windows': [2, 10],
         # Columns to load from posts file
         'time_col': 'timestamp',        # datetime column
         'time_mode': 'datetime',        # compute time_since_root from timestamps
@@ -65,9 +67,9 @@ DATASETS = {
     },
     'gaming': {
         'type': 'reddit',
-        'posts_file': os.path.join(REDDIT_ROOT, "reddit_gaming_posts.parquet"),
-        'early_window_dir': os.path.join(REDDIT_ROOT, "snapshots/gaming"),
-        'split_windows': [20, 50, 90],
+        'posts_file': os.path.join(REDDIT_ROOT, "gaming/metadata/reddit_gaming_posts.parquet"),
+        'early_window_dir': os.path.join(REDDIT_ROOT, "gaming/snapshots"),
+        'split_windows': [20, 50],
         'time_col': 'time_since_root',  # already in minutes
         'time_mode': 'minutes',
         'post_id_col': 'post_id',
@@ -78,9 +80,9 @@ DATASETS = {
     },
     'futurology': {
         'type': 'reddit',
-        'posts_file': os.path.join(REDDIT_ROOT, "reddit_futurology_posts.parquet"),
-        'early_window_dir': os.path.join(REDDIT_ROOT, "snapshots/futurology"),
-        'split_windows': [30, 90, 180],
+        'posts_file': os.path.join(REDDIT_ROOT, "futurology/metadata/reddit_futurology_posts.parquet"),
+        'early_window_dir': os.path.join(REDDIT_ROOT, "futurology/snapshots"),
+        'split_windows': [90],
         'time_col': 'time_since_root',
         'time_mode': 'minutes',
         'post_id_col': 'post_id',
@@ -91,9 +93,9 @@ DATASETS = {
     },
     'ama': {
         'type': 'reddit',
-        'posts_file': os.path.join(REDDIT_ROOT, "reddit_ama_posts.parquet"),
-        'early_window_dir': os.path.join(REDDIT_ROOT, "snapshots/ama"),
-        'split_windows': [15, 30, 60],
+        'posts_file': os.path.join(REDDIT_ROOT, "ama/metadata/reddit_ama_posts.parquet"),
+        'early_window_dir': os.path.join(REDDIT_ROOT, "ama/snapshots"),
+        'split_windows': [15, 30],
         'time_col': 'time_since_root',
         'time_mode': 'minutes',
         'post_id_col': 'post_id',

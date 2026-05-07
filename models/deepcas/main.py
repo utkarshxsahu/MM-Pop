@@ -103,6 +103,12 @@ def _write_log_file(path, rows):
         f.write("\n".join(lines) + "\n")
 
 
+def _append_run_log(path, message):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "a", encoding="utf-8") as f:
+        f.write(f"{datetime.now().isoformat()}\t{message}\n")
+
+
 def _metrics_log_rows(dataset_name, window_minutes, metrics_by_horizon):
     rows = []
     experiment = _current_experiment_label()
@@ -308,8 +314,10 @@ def run_experiment(window_minutes, run_output_dir):
 def main():
     """Run experiments for configured datasets and windows."""
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    run_root = os.path.join(os.getcwd(), f"deepcas_run_{timestamp}")
+    run_root = os.path.join(config.RESULTS_ROOT, f"run_{timestamp}")
     os.makedirs(run_root, exist_ok=True)
+    run_log_path = os.path.join(run_root, "run.log")
+    _append_run_log(run_log_path, f"Starting DeepCas datasets={config.DATASETS_TO_RUN} future_horizons={config.USE_FUTURE_HORIZONS}")
 
     print(f"Starting DeepCas experiments - {timestamp}")
     print(f"Datasets: {config.DATASETS_TO_RUN}")
@@ -323,6 +331,7 @@ def main():
         config.set_dataset(dataset_name)
         dataset_output_dir = os.path.join(run_root, dataset_name)
         os.makedirs(dataset_output_dir, exist_ok=True)
+        _append_run_log(run_log_path, f"Dataset started: {dataset_name} windows={config.WINDOWS}")
 
         print(f"\n{'=' * 80}")
         print(f"DATASET: {dataset_name.upper()}")
@@ -339,11 +348,14 @@ def main():
                 dataset_results[f"{window}min"] = results
                 dataset_log_rows.extend(log_rows)
                 combined_log_rows.extend(log_rows)
+                _append_run_log(run_log_path, f"Completed dataset={dataset_name} window={window}min")
             except Exception as e:
                 print(f"\nERROR in dataset={dataset_name}, window={window}min: {e}")
+                _append_run_log(run_log_path, f"ERROR dataset={dataset_name} window={window}min error={e}")
                 import traceback
 
                 traceback.print_exc()
+                _append_run_log(run_log_path, traceback.format_exc())
 
         all_results[dataset_name] = dataset_results
 
@@ -354,6 +366,7 @@ def main():
     with open(os.path.join(run_root, "summary_results.json"), "w") as f:
         json.dump(all_results, f, indent=2, default=_json_default)
     _write_log_file(os.path.join(run_root, "combined_experiment.log"), combined_log_rows)
+    _append_run_log(run_log_path, "All DeepCas experiments complete")
 
     print(f"\n{'=' * 80}")
     print(f"All experiments complete! Results saved to: {run_root}")

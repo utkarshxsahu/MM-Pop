@@ -6,9 +6,11 @@ import os
 import torch
 from config.dataset_config import DATASETS
 
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
+
 # --- DATASET SELECTION ---
 #CURRENT_DATASET_NAME = "gaming"
-DATASETS_TO_RUN =  ["futurology"]  # add/remove as needed ["bluesky","gaming","futurology","ama"]
+DATASETS_TO_RUN =  ["bluesky", "gaming", "futurology", "ama"]
 CURRENT_DATASET_NAME = DATASETS_TO_RUN[0]  # used for initial config load
 
 DATASET_CONF = DATASETS[CURRENT_DATASET_NAME]
@@ -24,7 +26,7 @@ IMAGE_DIR = PATHS.get('image_dir', None)
 
 # --- CACHE SETTINGS ---
 CACHE_DIR = None
-MAIN_CACHE_BASE = "/scratch/dgl/Social_Network/main_feature_cache"
+MAIN_CACHE_BASE = os.path.join(PROJECT_ROOT, "results", "mmg_popnet", "feature_cache")
 FORCE_RECOMPUTE = False
 
 # --- IMAGE FEATURES ---
@@ -37,8 +39,9 @@ IMAGE_DROPOUT = 0.3
 IMAGE_WEIGHT_DECAY = 0.01
 
 RAW_IMAGE_DIRS = {
-    'gaming': '/scratch/dgl/Social_Network/reddit/images/gaming',
-    'futurology': '/scratch/dgl/Social_Network/reddit/images/futurology'
+    'gaming': DATASETS['gaming']['paths']['image_dir'],
+    'futurology': DATASETS['futurology']['paths']['image_dir'],
+    'ama': DATASETS['ama']['paths']['image_dir'],
 }
 
 EARLY_WINDOWS = DATASET_CONF['windows']
@@ -64,7 +67,7 @@ MODALITY_ABLATION_SEEDS = [42, 1042, 2042]
 # One machine-readable JSON per runner invocation. These are additive and do
 # not replace the detailed per-run/per-window results files.
 WRITE_METRICS_SUMMARY_JSON = True
-METRICS_SUMMARY_DIR = "/scratch/dgl/Social_Network/metrics_summaries"
+METRICS_SUMMARY_DIR = os.path.join(PROJECT_ROOT, "results", "mmg_popnet", "metrics_summaries")
 
 MAX_EPOCHS = 200
 PATIENCE = 10

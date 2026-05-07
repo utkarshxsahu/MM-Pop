@@ -63,8 +63,8 @@ from utils.visualization import (
 # Editable experiment config
 # ---------------------------------------------------------------------------
 
-MODALITY_ABLATION_OUTPUT_BASE = "/scratch/dgl/Social_Network/ablation_modality"
-MODALITY_ABLATION_CACHE_BASE = "/scratch/dgl/Social_Network/ablation_modality_cache"
+MODALITY_ABLATION_OUTPUT_BASE = os.path.join(cfg.OUTPUT_DIR, "ablation_modality")
+MODALITY_ABLATION_CACHE_BASE = os.path.join(cfg.OUTPUT_DIR, "ablation_modality_cache")
 
 ABLATION_VARIANTS = [
     #"no_text",
@@ -75,8 +75,9 @@ ABLATION_VARIANTS = [
 ]
 
 ABLATION_DATASETS = {
-    "gaming": [90],
-    #"futurology": [180],
+    "gaming": [20, 50],
+    "futurology": [90],
+    "ama": [30],
 }
 
 ABLATION_MODEL = "text_graphsage"

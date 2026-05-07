@@ -1,0 +1,17 @@
+numpy
+pandas
+pyarrow
+duckdb
+polars
+scikit-learn
+scipy
+matplotlib
+pillow
+tqdm
+optuna
+pyyaml
+requests
+torch==2.6.0
+torch-geometric==2.7.0
+transformers==4.57.3
+sentence-transformers==5.1.2
