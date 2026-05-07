@@ -1,6 +1,18 @@
 # MM-Pop
 
-Code repository for the MM-Pop benchmark.
+Code repository for the MMG-Pop (Multimodal Graph-based Popularity Prediction) benchmark.
+
+## Abstract
+
+Social media popularity prediction aims to forecast the future reach or influence of online content from early-stage observations.
+Accurate prediction enables key downstream applications, such as advertising optimization and strategic content planning by users, creators, and platforms.
+Despite substantial progress, existing popularity prediction works often fail to jointly consider multimodal content and temporal social interaction signals. Moreover, the literature remains highly fragmented across datasets, modalities, observation windows, prediction targets, and evaluation protocols. This fragmentation prevents fair comparison and obscures a systematic understanding of how textual, visual, temporal, and interaction-based signals jointly shape popularity dynamics.
+To address these challenges, we introduce **MMG-Pop**, the first **Multi-modal Graph-based Popularity Prediction** benchmark, which unifies datasets, modalities, temporal interaction signals, and representative baselines under a standardized evaluation protocol. Furthermore, we propose **MMG-PopNet**, a unified multi-modal graph-based network that jointly models multimodal signals and graph-structured social interactions.
+Extensive experiments on **MMG-Pop**, comprising four datasets across **Bluesky** and **Reddit**, demonstrate the superior performance of **MMG-PopNet** and yield new insights into cross-platform training generalization, multi-task prediction benefits, multi-modality contributions, and LLM prediction limitations.
+These findings establish a unified foundation for future research on social dynamics modeling and intervention under heterogeneous modalities and socially aware agentic ecosystem paradigms.
+
+
+Access dataset: https://huggingface.co/datasets/anonymoususer54829/MMG-Pop
 
 ## Data Layout
 
