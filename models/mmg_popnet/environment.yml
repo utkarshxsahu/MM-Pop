@@ -1,0 +1,33 @@
+name: soc_analysis2
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+  - numpy
+  - pandas
+  - pyarrow
+  - duckdb
+  - polars
+  - scikit-learn
+  - scipy
+  - matplotlib
+  - pillow
+  - tqdm
+  - optuna
+  - pyyaml
+  - requests
+  - ipykernel
+  - pip:
+      - --extra-index-url https://download.pytorch.org/whl/cu124
+      - --find-links https://data.pyg.org/whl/torch-2.6.0+cu124.html
+      - torch==2.6.0+cu124
+      - torch-geometric==2.7.0
+      - pyg-lib==0.5.0+pt26cu124
+      - torch-scatter==2.1.2+pt26cu124
+      - torch-sparse==0.6.18+pt26cu124
+      - torch-cluster==1.6.3+pt26cu124
+      - torch-spline-conv==1.2.2+pt26cu124
+      - transformers==4.57.3
+      - sentence-transformers==5.1.2
