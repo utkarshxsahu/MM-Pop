@@ -1,4 +1,4 @@
-# MM-Pop
+# MMG-Pop
 
 Code repository for the MMG-Pop (Multimodal Graph-based Popularity Prediction) benchmark.
 
