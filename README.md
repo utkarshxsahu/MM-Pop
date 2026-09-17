@@ -74,7 +74,7 @@ A pip-oriented dependency list is also provided at `models/mmg_popnet/requiremen
 
 ## Generate Text Embeddings
 
-MMG-PopNet `mlp`, `graphsage`, and `gat` use frozen MiniLM post embeddings from each dataset's `embeddings/` folder. `text_graphsage` trains from tokenized text directly and does not require these precomputed embeddings.
+In MMG-PopNet, MLP uses frozen MiniLM post embeddings from each dataset's `embeddings/` folder. `MMG-PopNet` trains from tokenized text directly and does not require these precomputed embeddings.
 
 Generate all embeddings:
 
@@ -112,7 +112,7 @@ The generated files go to each dataset's `snapshots/future_horizons/` folder. Ru
 
 MMG-PopNet uses `models/mmg_popnet/config/config.py` for default datasets, windows, model selection, image settings, and future-horizon settings.
 
-Use TextGraphSAGE:
+Use MMG-PopNet (**Note:** In the codebase, **MMG-PopNet** is referred to as `TextGraphSAGE`. Therefore, any occurrence of `text_graphsage` corresponds to **MMG-PopNet**.)
 
 ```python
 MODELS_TO_RUN = ["text_graphsage"]
@@ -158,7 +158,7 @@ Outputs go to `results/mmg_popnet/foundational/run_<timestamp>/`.
 
 ## Modality Ablation
 
-Modality ablation runs TextGraphSAGE/UniSD variants such as `no_image`, `no_topology`, and `no_temporal`.
+Modality ablation runs MMG-PopNet variants such as `no_image`, `no_topology`, and `no_temporal`.
 
 ```bash
 cd models/mmg_popnet
