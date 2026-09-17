@@ -1,5 +1,5 @@
 """
-Modality ablation runner for TextGraphSAGE / UniSD.
+Modality ablation runner for MMG-PopNet (TextGraphSAGE).
 
 Single GPU:
     python modality_ablation_runner.py
@@ -67,11 +67,11 @@ MODALITY_ABLATION_OUTPUT_BASE = os.path.join(cfg.OUTPUT_DIR, "ablation_modality"
 MODALITY_ABLATION_CACHE_BASE = os.path.join(cfg.OUTPUT_DIR, "ablation_modality_cache")
 
 ABLATION_VARIANTS = [
-    #"no_text",
+    "no_text",
     "no_image",
     "no_topology",
     "no_temporal",
-    #"full_unisd",
+    
 ]
 
 ABLATION_DATASETS = {
@@ -110,12 +110,6 @@ VALID_VARIANTS = {
         "ablate_image": False,
         "ablate_topology": False,
         "ablate_temporal": True,
-    },
-    "full_unisd": {
-        "ablate_text": False,
-        "ablate_image": False,
-        "ablate_topology": False,
-        "ablate_temporal": False,
     },
 }
 
